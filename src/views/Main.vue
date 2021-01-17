@@ -12,7 +12,8 @@
 
       <!-- <pre v-if="data.length">{{ data }}</pre> -->
       <div class="main__inner-wrapper" v-if="data.length">
-        <Data :data="data" />
+        <Data :data="data" :getState="getState" />
+        <Steps />
       </div>
     </div>
   </main>
@@ -23,6 +24,7 @@ import createAPI from "@/api";
 import Loader from "@/components/Loader.vue";
 import Error from "@/components/Error.vue";
 import Data from "@/components/Data.vue";
+import Steps from "@/components/Steps.vue";
 
 const api = createAPI();
 
@@ -31,7 +33,17 @@ export default {
   components: {
     Loader,
     Error,
-    Data
+    Data,
+    Steps
+  },
+  data() {
+    return {
+      data: [],
+      status: null,
+      isLoading: true,
+      time: Date.now(),
+      prevStates: []
+    };
   },
   mounted() {
     setTimeout(() => {
@@ -57,15 +69,24 @@ export default {
         });
     }, 1500);
   },
-  data() {
-    return {
-      data: [],
-      status: null,
-      isLoading: true,
-      time: Date.now()
-    };
-  },
   methods: {
+    getState(state) {
+      const obj = {};
+
+      for (let key in state) {
+        const value = state[key];
+
+        if (typeof value === "object") {
+          const arr = [...value];
+
+          // for (let i = 0; i < value.length; i++) {
+          //   arr.push(value[i]);
+          // }
+        }
+      }
+
+      this.prevStates.push(obj);
+    },
     flatArr(data, result) {
       const toString = Object.prototype.toString;
 
