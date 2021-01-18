@@ -81,9 +81,7 @@ export default {
   },
   methods: {
     handleButtonClick(index) {
-      const lastState = this.prevStates.length - 1;
-
-      this.stateNumber = lastState - index;
+      this.stateNumber = index;
     },
     getState(state) {
       const obj = {
@@ -184,10 +182,6 @@ export default {
 .main {
   &__time {
     font-weight: 700;
-  }
-
-  &__inner-wrapper {
-    // display: flex;
   }
 }
 </style>

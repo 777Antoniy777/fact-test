@@ -76,11 +76,9 @@ export default {
   methods: {
     flatValues(data, result) {
       const toString = Object.prototype.toString;
-
       for (let i = 0; i < data.length; i++) {
         const elem = data[i];
         const type = toString.call(elem);
-
         if (elem) {
           if (type === "[object Array]") {
             this.flatValues(elem, result);
@@ -117,7 +115,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 150px;
+    width: 200px;
     min-height: 36px;
     margin: 0 auto;
     padding: 5px 10px;
@@ -129,7 +127,6 @@ export default {
     cursor: pointer;
   }
 }
-
 // multiselect styles
 .multiselect,
 .multiselect__input,
