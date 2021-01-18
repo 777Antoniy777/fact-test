@@ -10,10 +10,14 @@
       <!-- Time loading -->
       <p class="main__time" v-if="data.length">Время загрузки: {{ time }} с</p>
 
-      <!-- <pre v-if="data.length">{{ data }}</pre> -->
       <div class="main__inner-wrapper" v-if="data.length">
-        <Data :data="data" :getState="getState" />
-        <Steps />
+        <Data
+          :data="data"
+          :getState="getState"
+          :state="prevStates"
+          :number="stateNumber"
+        />
+        <Steps :steps="prevStates" :handleButtonClick="handleButtonClick" />
       </div>
     </div>
   </main>
@@ -42,7 +46,13 @@ export default {
       status: null,
       isLoading: true,
       time: Date.now(),
-      prevStates: []
+      prevStates: [
+        {
+          selectValues: [null, null],
+          listValues: []
+        }
+      ],
+      stateNumber: 0
     };
   },
   mounted() {
@@ -70,18 +80,33 @@ export default {
     }, 1500);
   },
   methods: {
+    handleButtonClick(index) {
+      const lastState = this.prevStates.length - 1;
+
+      this.stateNumber = lastState - index;
+    },
     getState(state) {
-      const obj = {};
+      const obj = {
+        selectValues: [],
+        listValues: []
+      };
+      const toString = Object.prototype.toString;
 
       for (let key in state) {
-        const value = state[key];
+        const objectValue = state[key];
+        const objectValueType = toString.call(objectValue);
+        const isArray = "[object Array]";
 
-        if (typeof value === "object") {
-          const arr = [...value];
+        if (objectValueType === isArray) {
+          for (let i = 0; i < objectValue.length; i++) {
+            const elem = objectValue[i];
 
-          // for (let i = 0; i < value.length; i++) {
-          //   arr.push(value[i]);
-          // }
+            if (elem && typeof elem === "object") {
+              obj[key].push([...elem]);
+            } else {
+              obj[key].push(elem);
+            }
+          }
         }
       }
 
@@ -93,8 +118,9 @@ export default {
       for (let i = 0; i < data.length; i++) {
         const elem = data[i];
         const type = toString.call(elem);
+        const isArray = "[object Array]";
 
-        if (type === "[object Array]") {
+        if (type === isArray) {
           this.flatArr(elem, result);
         } else {
           result.push(elem);

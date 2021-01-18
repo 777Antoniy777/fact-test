@@ -3,8 +3,10 @@
     <h2 class="steps__title">История просмотров</h2>
 
     <ul class="steps__list">
-      <li class="steps__item">
-        <button type="button"></button>
+      <li class="steps__item" v-for="(_, i) in steps" :key="i">
+        <button type="button" @click="handleButtonClick(i)">
+          {{ i }} шаг назад
+        </button>
       </li>
     </ul>
   </section>
@@ -12,7 +14,11 @@
 
 <script>
 export default {
-  name: "Steps"
+  name: "Steps",
+  props: {
+    steps: Array,
+    handleButtonClick: Function
+  }
 };
 </script>
 

@@ -50,16 +50,15 @@ export default {
   },
   props: {
     data: Array,
-    getState: Function
+    getState: Function,
+    state: Array,
+    number: Number
   },
   data() {
     return {
-      selectValues: [null, null],
-      listValues: []
+      selectValues: this.state[this.number].selectValues,
+      listValues: this.state[this.number].listValues
     };
-  },
-  mounted() {
-    this.getState(this.$data);
   },
   beforeUpdate() {
     const result = [];
@@ -67,6 +66,12 @@ export default {
     this.flatValues(this.selectValues, result);
     this.listValues = result;
     this.getState(this.$data);
+  },
+  watch: {
+    number() {
+      this.selectValues = this.state[this.number].selectValues;
+      this.listValues = this.state[this.number].listValues;
+    }
   },
   methods: {
     flatValues(data, result) {
